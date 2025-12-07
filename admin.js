@@ -1,4 +1,4 @@
-import { supabaseAuth } from "./auth.js";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null
 let currentSection = "dashboard"
