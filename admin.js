@@ -1,6 +1,3 @@
-
-const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-
 let currentUser = null
 let currentSection = "dashboard"
 
