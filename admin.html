@@ -1,65 +1,184 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo</title>
-    <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo | Defesa Civil</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-    <div id="sidebar">
-        <h2>Painel Admin</h2>
-        <ul>
-            <li data-section="dashboard">Dashboard</li>
-            <li data-section="posts">Postagens</li>
-            <li data-section="users">Usuários</li>
-            <li data-section="settings">Configurações</li>
-        </ul>
+<body class="admin-page">
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <img src="https://maxgtp2.github.io/defesacivil/public/images/logo2.png" alt="Logo" class="sidebar-logo">
+      <h2>Defesa Civil</h2>
     </div>
-
-    <div id="main-content">
-        <section id="dashboard" class="section active">
-            <h1>Dashboard</h1>
-            <p>Total de Postagens: <span id="total-posts">0</span></p>
-            <p>Total de Usuários: <span id="total-users">0</span></p>
-        </section>
-
-        <section id="posts" class="section">
-            <h1>Postagens</h1>
-            <table id="posts-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </section>
-
-        <section id="users" class="section">
-            <h1>Usuários</h1>
-            <table id="users-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </section>
-
-        <section id="settings" class="section">
-            <h1>Configurações</h1>
-            <p>Configurações do sistema aqui.</p>
-        </section>
+    <nav class="sidebar-nav">
+      <a href="#" id="nav-dashboard" class="nav-item active" data-section="dashboard">Dashboard</a>
+      <a href="#" id="nav-posts" class="nav-item" data-section="posts">Postagens</a>
+      <a href="#" id="nav-ads" class="nav-item" data-section="ads">Propagandas</a>
+      <a href="#" id="nav-quicklinks" class="nav-item" data-section="quicklinks">Links Rápidos</a>
+      <a href="#" id="nav-users" class="nav-item" data-section="users">Usuários</a>
+      <a href="#" id="nav-visibility" class="nav-item" data-section="visibility">Visibilidade</a>
+      <a href="#" id="nav-settings" class="nav-item" data-section="settings">Configurações</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn btn-outline btn-full">Sair</button>
     </div>
+  </aside>
 
-    <script src="admin.js"></script>
+  <!-- Main Content -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <h1 id="section-title">Dashboard</h1>
+      <div class="admin-user">
+        <span id="admin-username">Administrador</span>
+      </div>
+    </header>
+
+    <!-- Sections -->
+    <section id="section-dashboard" class="admin-section active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon posts"></div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-posts">0</span>
+            <span class="stat-label">Postagens</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon visits"></div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-visits">0</span>
+            <span class="stat-label">Visitas</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon ads"></div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-ads">0</span>
+            <span class="stat-label">Propagandas</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon users"></div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-users">0</span>
+            <span class="stat-label">Usuários</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-posts" class="admin-section">
+      <div class="section-actions">
+        <button class="btn btn-primary" onclick="openPostModal()">Nova Postagem</button>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Título</th>
+              <th>Visível</th>
+              <th>Data</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="posts-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="section-ads" class="admin-section">
+      <div class="section-actions">
+        <button class="btn btn-primary" onclick="openAdModal()">Nova Propaganda</button>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Posição</th>
+              <th>Tamanho</th>
+              <th>Ativa</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="ads-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="section-quicklinks" class="admin-section">
+      <div class="section-actions">
+        <button class="btn btn-primary" onclick="openLinkModal()">Novo Link</button>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>URL</th>
+              <th>Ordem</th>
+              <th>Visível</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="links-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="section-users" class="admin-section">
+      <div class="section-actions">
+        <button class="btn btn-primary" onclick="openUserModal()">Novo Usuário</button>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ativo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="section-visibility" class="admin-section">
+      <div class="visibility-grid" id="visibility-grid"></div>
+    </section>
+
+    <section id="section-settings" class="admin-section">
+      <div class="settings-grid">
+        <!-- Settings forms aqui -->
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal Overlay -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modal-title">Modal</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
