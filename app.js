@@ -1,3 +1,7 @@
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+const supabaseAdmin = supabase
+
+
 // State
 let posts = []
 let currentSlide = 0
