@@ -1,13 +1,9 @@
 // =======================
 // Configurações Supabase
 // =======================
-window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
-window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "SUA_CHAVE_ANON_REAL_AQUI";
-
-const supabaseAdmin = supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_ANON_KEY
-);
+const SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
+const supabaseAdmin = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =======================
 // Estado Global
