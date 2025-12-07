@@ -1,4 +1,6 @@
-const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+const supabaseAdmin = supabase
+
 
 
 let currentUser = null
