@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "./config.js";
+import { supabaseAuth } from "./auth.js";
 
 let currentUser = null
 let currentSection = "dashboard"
