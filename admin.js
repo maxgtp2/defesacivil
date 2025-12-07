@@ -1,9 +1,24 @@
 // =======================
 // Configurações Supabase
 // =======================
+if (!window.supabase) {
+  throw new Error(
+    "O script do Supabase não está carregado. Inclua <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js'></script> antes do admin.js"
+  );
+}
+
+// =======================
+// Configurações Supabase
+// =======================
 window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
-window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "COLOQUE_SUA_CHAVE_AQUI_SEM_RETICENCIAS";
-const supabaseAdmin = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+window.SUPABASE_ANON_KEY =
+  window.SUPABASE_ANON_KEY ||
+  "COLOQUE_SUA_CHAVE_AQUI_SEM_RETICENCIAS";
+
+const supabaseAdmin = supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
 
 // =======================
 // Estado Global
@@ -103,10 +118,14 @@ function setupForms() {
 // Mostrar seção
 // =======================
 function showSection(section) {
-  document.querySelectorAll(".nav-item").forEach((item) => item.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach((item) =>
+    item.classList.remove("active")
+  );
   document.querySelector(`[data-section="${section}"]`)?.classList.add("active");
 
-  document.querySelectorAll(".admin-section").forEach((sec) => sec.classList.remove("active"));
+  document.querySelectorAll(".admin-section").forEach((sec) =>
+    sec.classList.remove("active")
+  );
   document.getElementById(`section-${section}`)?.classList.add("active");
 
   currentSection = section;
@@ -158,35 +177,39 @@ async function loadDashboard() {
 }
 
 // =======================
-// Upload e preview de imagens
+// UPLOAD E PREVIEW DE IMAGENS
 // =======================
 function setupImagePreviews() {
-  document.querySelectorAll('input[type="file"][data-preview]').forEach((input) => {
-    const previewId = input.dataset.preview;
-    input.addEventListener("change", async () => {
-      const file = input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        document.getElementById(previewId)?.setAttribute("src", reader.result);
-      };
-      reader.readAsDataURL(file);
+  document.querySelectorAll('input[type="file"][data-preview]').forEach(
+    (input) => {
+      const previewId = input.dataset.preview;
+      input.addEventListener("change", async () => {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          document.getElementById(previewId)?.setAttribute("src", reader.result);
+        };
+        reader.readAsDataURL(file);
 
-      try {
-        const fileName = `${Date.now()}_${file.name}`;
-        const { data, error } = await supabaseAdmin.storage
-          .from("uploads")
-          .upload(fileName, file, { cacheControl: "3600", upsert: true });
-        if (error) throw error;
-        const { publicUrl, error: urlError } = supabaseAdmin.storage.from("uploads").getPublicUrl(fileName);
-        if (urlError) throw urlError;
-        input.dataset.url = publicUrl;
-      } catch (err) {
-        console.error(err);
-        showToast("Erro ao enviar imagem!");
-      }
-    });
-  });
+        try {
+          const fileName = `${Date.now()}_${file.name}`;
+          const { error } = await supabaseAdmin.storage
+            .from("uploads")
+            .upload(fileName, file, { cacheControl: "3600", upsert: true });
+          if (error) throw error;
+
+          const { data: urlData } = supabaseAdmin.storage
+            .from("uploads")
+            .getPublicUrl(fileName);
+          input.dataset.url = urlData.publicUrl;
+        } catch (err) {
+          console.error(err);
+          showToast("Erro ao enviar imagem!");
+        }
+      });
+    }
+  );
 }
 
 // =======================
