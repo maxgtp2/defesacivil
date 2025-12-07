@@ -345,6 +345,353 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 3000);
 }
 
+
+
+// =======================
+// POSTS
+// =======================
+async function savePost(e) {
+  e.preventDefault();
+  try {
+    const form = e.target;
+    const id = form.dataset.id || null;
+    const title = form.title.value;
+    const content = form.content.value;
+    const image_url = form.image_url.value;
+    const is_visible = form.is_visible.checked;
+
+    if (!title) return showToast("Título obrigatório!");
+
+    let res;
+    if (id) {
+      res = await supabaseAdmin
+        .from("posts")
+        .update({ title, content, image_url, is_visible })
+        .eq("id", id);
+    } else {
+      res = await supabaseAdmin.from("posts").insert([{ title, content, image_url, is_visible }]);
+    }
+
+    if (res.error) throw res.error;
+
+    showToast("Post salvo com sucesso!");
+    form.reset();
+    loadPosts();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar post!");
+  }
+}
+
+async function editPost(id) {
+  try {
+    const { data } = await supabaseAdmin.from("posts").select("*").eq("id", id).single();
+    if (!data) return;
+
+    const form = document.getElementById("post-form");
+    form.dataset.id = data.id;
+    form.title.value = data.title;
+    form.content.value = data.content;
+    form.image_url.value = data.image_url;
+    form.is_visible.checked = data.is_visible;
+    showSection("posts");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar post!");
+  }
+}
+
+async function togglePostVisibility(id, current) {
+  try {
+    await supabaseAdmin.from("posts").update({ is_visible: !current }).eq("id", id);
+    showToast(`Post ${!current ? "visível" : "oculto"}!`);
+    loadPosts();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao alterar visibilidade!");
+  }
+}
+
+async function deletePost(id) {
+  try {
+    await supabaseAdmin.from("posts").delete().eq("id", id);
+    showToast("Post excluído!");
+    loadPosts();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao excluir post!");
+  }
+}
+
+// =======================
+// ADS
+// =======================
+async function saveAd(e) {
+  e.preventDefault();
+  try {
+    const form = e.target;
+    const id = form.dataset.id || null;
+    const title = form.title.value;
+    const link = form.link.value;
+    const is_active = form.is_active.checked;
+
+    if (!title) return showToast("Título obrigatório!");
+
+    let res;
+    if (id) {
+      res = await supabaseAdmin.from("advertisements").update({ title, link, is_active }).eq("id", id);
+    } else {
+      res = await supabaseAdmin.from("advertisements").insert([{ title, link, is_active }]);
+    }
+
+    if (res.error) throw res.error;
+    showToast("Anúncio salvo!");
+    form.reset();
+    loadAds();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar anúncio!");
+  }
+}
+
+async function editAd(id) {
+  try {
+    const { data } = await supabaseAdmin.from("advertisements").select("*").eq("id", id).single();
+    if (!data) return;
+
+    const form = document.getElementById("ad-form");
+    form.dataset.id = data.id;
+    form.title.value = data.title;
+    form.link.value = data.link;
+    form.is_active.checked = data.is_active;
+    showSection("ads");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar anúncio!");
+  }
+}
+
+async function toggleAd(id, current) {
+  try {
+    await supabaseAdmin.from("advertisements").update({ is_active: !current }).eq("id", id);
+    showToast(`Anúncio ${!current ? "ativado" : "desativado"}!`);
+    loadAds();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao alterar status do anúncio!");
+  }
+}
+
+async function deleteAd(id) {
+  try {
+    await supabaseAdmin.from("advertisements").delete().eq("id", id);
+    showToast("Anúncio excluído!");
+    loadAds();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao excluir anúncio!");
+  }
+}
+
+// =======================
+// QUICK LINKS
+// =======================
+async function saveLink(e) {
+  e.preventDefault();
+  try {
+    const form = e.target;
+    const id = form.dataset.id || null;
+    const name = form.name.value;
+    const url = form.url.value;
+
+    if (!name || !url) return showToast("Preencha todos os campos!");
+
+    if (id) {
+      await supabaseAdmin.from("quick_links").update({ name, url }).eq("id", id);
+    } else {
+      await supabaseAdmin.from("quick_links").insert([{ name, url }]);
+    }
+
+    showToast("Link salvo!");
+    form.reset();
+    loadQuickLinks();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar link!");
+  }
+}
+
+async function editLink(id) {
+  try {
+    const { data } = await supabaseAdmin.from("quick_links").select("*").eq("id", id).single();
+    if (!data) return;
+
+    const form = document.getElementById("link-form");
+    form.dataset.id = data.id;
+    form.name.value = data.name;
+    form.url.value = data.url;
+    showSection("quick-links");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar link!");
+  }
+}
+
+async function deleteLink(id) {
+  try {
+    await supabaseAdmin.from("quick_links").delete().eq("id", id);
+    showToast("Link excluído!");
+    loadQuickLinks();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao excluir link!");
+  }
+}
+
+// =======================
+// USERS
+// =======================
+async function saveUser(e) {
+  e.preventDefault();
+  try {
+    const form = e.target;
+    const id = form.dataset.id || null;
+    const name = form.name.value;
+    const email = form.email.value;
+    const role = form.role.value;
+    const is_active = form.is_active.checked;
+
+    if (!name || !email || !role) return showToast("Preencha todos os campos!");
+
+    if (id) {
+      await supabaseAdmin.from("users").update({ name, email, role, is_active }).eq("id", id);
+    } else {
+      await supabaseAdmin.from("users").insert([{ name, email, role, is_active }]);
+    }
+
+    showToast("Usuário salvo!");
+    form.reset();
+    loadUsers();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar usuário!");
+  }
+}
+
+async function editUser(id) {
+  try {
+    const { data } = await supabaseAdmin.from("users").select("*").eq("id", id).single();
+    if (!data) return;
+
+    const form = document.getElementById("user-form");
+    form.dataset.id = data.id;
+    form.name.value = data.name;
+    form.email.value = data.email;
+    form.role.value = data.role;
+    form.is_active.checked = data.is_active;
+    showSection("users");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar usuário!");
+  }
+}
+
+async function toggleUser(id, current) {
+  try {
+    await supabaseAdmin.from("users").update({ is_active: !current }).eq("id", id);
+    showToast(`Usuário ${!current ? "ativado" : "desativado"}!`);
+    loadUsers();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao alterar status do usuário!");
+  }
+}
+
+async function deleteUser(id) {
+  try {
+    await supabaseAdmin.from("users").delete().eq("id", id);
+    showToast("Usuário excluído!");
+    loadUsers();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao excluir usuário!");
+  }
+}
+
+// =======================
+// SETTINGS
+// =======================
+async function saveContactSettings(e) {
+  e.preventDefault();
+  try {
+    const email = document.getElementById("contact-email").value;
+    await supabaseAdmin.from("settings").update({ contact_email: email });
+    showToast("Configurações de contato salvas!");
+    loadSettings();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar contato!");
+  }
+}
+
+async function saveSocialSettings(e) {
+  e.preventDefault();
+  try {
+    const facebook = document.getElementById("facebook-url").value;
+    await supabaseAdmin.from("settings").update({ facebook });
+    showToast("Configurações sociais salvas!");
+    loadSettings();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar redes sociais!");
+  }
+}
+
+async function saveColorSettings(e) {
+  e.preventDefault();
+  try {
+    const color = document.getElementById("theme-color").value;
+    await supabaseAdmin.from("settings").update({ theme_color: color });
+    showToast("Cor do tema salva!");
+    loadSettings();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao salvar cor!");
+  }
+}
+
+// =======================
+// VISIBILITY
+// =======================
+async function toggleVisibility(id, current) {
+  try {
+    await supabaseAdmin.from("visibility").update({ is_visible: !current }).eq("id", id);
+    showToast(`Item ${!current ? "visível" : "oculto"}!`);
+    loadVisibility();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao alterar visibilidade!");
+  }
+}
+
+// =======================
+// PASSWORD RESET
+// =======================
+async function resetPassword(e) {
+  e.preventDefault();
+  try {
+    const email = document.getElementById("reset-email").value;
+    if (!email) return showToast("Digite um email!");
+
+    await supabaseAdmin.auth.api.resetPasswordForEmail(email);
+    showToast("Email de redefinição enviado!");
+    e.target.reset();
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao enviar email de redefinição!");
+  }
+}
+
 // =======================
 // Aqui você implementa:
 // savePost, saveAd, saveLink, saveUser, saveContactSettings, saveSocialSettings, saveColorSettings, resetPassword
