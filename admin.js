@@ -1,7 +1,7 @@
 // Admin Panel JavaScript
 const SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co"
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxaWh4cnJ3dWNiZndyZnlqaGF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNDM2MTcsImV4cCI6MjA2NDgxOTYxN30.xsRicBxetP0OOjNVj2gCVavGMKLmAgVdcZ7M68gkx0c"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxaWh4cnJ3dWNiZndyZnlqaGF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5Nzc5NTgsImV4cCI6MjA4MDU1Mzk1OH0.Vzqrk2oQNfMj8KRcXlcQkk1-4WNmxMWetCNCMA6-8RM"
 
 const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
