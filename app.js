@@ -59,23 +59,40 @@ async function loadSettings() {
   }
 }
 
-// Load Posts
+// Load Instagram Posts (substitui loadPosts)
 async function loadPosts() {
   try {
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("is_visible", true)
-      .order("created_at", { ascending: false })
+    const username = "defesacivil_co";
+    const rssUrl = `https://rsshub.app/instagram/user/${username}`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
-    if (error) throw error
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Erro ao buscar posts do Instagram");
 
-    posts = data || []
-    renderPosts()
-  } catch (error) {
-    console.error("Error loading posts:", error)
+    const data = await response.json();
+    const items = data.items || [];
+
+    posts = items.map(post => ({
+      title: post.title || "",
+      content: post.description || "",
+      image_url: post.thumbnail || "/news-collage.png",
+      external_link: post.link,
+      created_at: post.pubDate
+    }));
+
+    renderPosts(); // chama a função existente do carousel
+  } catch (err) {
+    console.error("Erro carregando posts do Instagram:", err);
+
+    // Caso falhe, exibe mensagem no carousel
+    const track = document.getElementById("news-carousel-track");
+    if (track) {
+      track.innerHTML =
+        '<p style="text-align:center;padding:2rem;color:var(--foreground-muted);">Não foi possível carregar as postagens do Instagram.</p>';
+    }
   }
 }
+
 
 // Render Posts in Carousel
 function renderPosts() {
