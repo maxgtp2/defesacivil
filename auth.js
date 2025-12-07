@@ -44,32 +44,30 @@ document.addEventListener("DOMContentLoaded", () => {
       errorEl.style.display = "none"
 
       try {
-        console.log("[v0] Tentando login com usuário:", username)
-
-        const { data: user, error } = await supabaseAuth
+        // Query the users table directly (custom auth without email confirmation)
+        const { data: users, error } = await supabaseAuth
           .from("users")
           .select("*")
           .eq("username", username)
           .eq("is_active", true)
-          .single()
 
-        console.log("[v0] Resposta do banco:", { user, error })
+        if (error) {
+          console.error("Database error:", error)
+          throw new Error("Erro ao conectar com o banco de dados")
+        }
 
-        if (error || !user) {
-          console.log("[v0] Erro ao buscar usuário:", error)
+        if (!users || users.length === 0) {
           throw new Error("Usuário não encontrado ou inativo")
         }
 
-        console.log("[v0] Usuário encontrado:", user.username)
-        console.log("[v0] Comparando senhas - DB:", user.password_hash, "Input:", password)
+        const user = users[0]
 
+        // Check password
         if (user.password_hash !== password) {
-          console.log("[v0] Senha incorreta")
           throw new Error("Senha incorreta")
         }
 
-        console.log("[v0] Login bem-sucedido!")
-
+        // Create session
         const sessionData = {
           user_id: user.id,
           username: user.username,
@@ -82,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("admin_session", JSON.stringify(sessionData))
         window.location.href = "admin.html"
       } catch (err) {
-        console.log("[v0] Erro no login:", err)
         errorEl.textContent = err.message
         errorEl.style.display = "block"
         loginText.style.display = "inline"
