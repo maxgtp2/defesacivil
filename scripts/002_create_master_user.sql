@@ -1,2 +1,0 @@
--- Este script será executado após o primeiro login do admin mestre
--- O usuário master será criado via aplicação com username: maxgtp
