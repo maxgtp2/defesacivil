@@ -3,16 +3,11 @@
 // =======================
 
 // =======================
-// Configurações Supabase (seguro para múltiplos scripts)
+// Configurações Supabase
 // =======================
 window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
 window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
-
-// Cria o cliente Supabase
-const supabaseAdmin = window.supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_ANON_KEY
-);
+const supabaseAdmin = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 // =======================
 // Estado Global
@@ -32,7 +27,6 @@ async function checkAdminAuth() {
     localStorage.removeItem("admin_session");
     return (window.location.href = "login.html");
   }
-
   currentUser = sessionData;
   return sessionData;
 }
@@ -44,12 +38,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const user = await checkAdminAuth();
   if (!user) return;
 
-  document.getElementById("admin-username").textContent = user.name;
-
+  document.getElementById("admin-username")?.textContent = user.name;
   setupNavigation();
   setupForms();
   showSection("dashboard");
   checkPermissions();
+  setupImagePreviews();
 });
 
 // =======================
@@ -57,7 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 // =======================
 function checkPermissions() {
   const permissions = currentUser.permissions || {};
-
   const sections = [
     { key: "can_manage_posts", navId: "nav-posts" },
     { key: "can_manage_ads", navId: "nav-ads" },
@@ -131,12 +124,11 @@ function showSection(section) {
     settings: loadSettings,
     visibility: loadVisibility,
   };
-
   loaders[section]?.();
 }
 
 // =======================
-// Função genérica Toast
+// Toast genérico
 // =======================
 function showToast(message) {
   const toast = document.createElement("div");
@@ -158,15 +150,50 @@ async function loadDashboard() {
       supabaseAdmin.from("visit_counter").select("count").limit(1).single(),
     ]);
 
-    document.getElementById("total-posts").textContent = postsRes.count || 0;
-    document.getElementById("total-users").textContent = usersRes.count || 0;
-    document.getElementById("total-ads").textContent = adsRes.count || 0;
-    document.getElementById("total-visits").textContent =
+    document.getElementById("total-posts")?.textContent = postsRes.count || 0;
+    document.getElementById("total-users")?.textContent = usersRes.count || 0;
+    document.getElementById("total-ads")?.textContent = adsRes.count || 0;
+    document.getElementById("total-visits")?.textContent =
       visitsRes.data?.count?.toLocaleString("pt-BR") || 0;
   } catch (err) {
     console.error(err);
     showToast("Erro ao carregar dashboard!");
   }
+}
+
+// =======================
+// UPLOAD E PREVIEW DE IMAGENS
+// =======================
+function setupImagePreviews() {
+  document.querySelectorAll('input[type="file"][data-preview]').forEach((input) => {
+    const previewId = input.dataset.preview;
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById(previewId)?.setAttribute("src", reader.result);
+      };
+      reader.readAsDataURL(file);
+
+      // Upload no Supabase Storage
+      try {
+        const fileName = `${Date.now()}_${file.name}`;
+        const { data, error } = await supabaseAdmin.storage
+          .from("uploads")
+          .upload(fileName, file, { cacheControl: "3600", upsert: true });
+        if (error) throw error;
+        const { publicUrl, error: urlError } = supabaseAdmin.storage
+          .from("uploads")
+          .getPublicUrl(fileName);
+        if (urlError) throw urlError;
+        input.dataset.url = publicUrl;
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao enviar imagem!");
+      }
+    });
+  });
 }
 
 // =======================
@@ -190,9 +217,7 @@ async function loadPosts() {
         <td>${new Date(post.created_at).toLocaleDateString("pt-BR")}</td>
         <td>
           <button onclick="editPost('${post.id}')">Editar</button>
-          <button onclick="togglePostVisibility('${post.id}', ${post.is_visible})">${
-          post.is_visible ? "Ocultar" : "Mostrar"
-        }</button>
+          <button onclick="togglePostVisibility('${post.id}', ${post.is_visible})">${post.is_visible ? "Ocultar" : "Mostrar"}</button>
           <button onclick="deletePost('${post.id}')">Excluir</button>
         </td>
       </tr>`
@@ -211,7 +236,7 @@ async function savePost(e) {
     const id = form.dataset.id || null;
     const title = form.title.value;
     const content = form.content.value;
-    const image_url = form.image_url.value;
+    const image_url = form.image_url.dataset.url || form.image_url.value;
     const is_visible = form.is_visible.checked;
 
     if (!title) return showToast("Título obrigatório!");
@@ -240,7 +265,8 @@ async function editPost(id) {
     form.dataset.id = data.id;
     form.title.value = data.title;
     form.content.value = data.content;
-    form.image_url.value = data.image_url;
+    form.image_url.dataset.url = data.image_url;
+    document.getElementById("post-image-preview")?.setAttribute("src", data.image_url);
     form.is_visible.checked = data.is_visible;
     showSection("posts");
   } catch (err) {
