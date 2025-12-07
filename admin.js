@@ -5,13 +5,8 @@
 // =======================
 // Configurações Supabase (seguro para múltiplos scripts)
 // =======================
-if (!window.SUPABASE_URL) {
-  window.SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co";
-}
-
-if (!window.SUPABASE_ANON_KEY) {
-  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
-}
+window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
+window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
 // Cria o cliente Supabase
 const supabaseAdmin = window.supabase.createClient(
@@ -19,9 +14,9 @@ const supabaseAdmin = window.supabase.createClient(
   window.SUPABASE_ANON_KEY
 );
 
-
-
-
+// =======================
+// Estado Global
+// =======================
 let currentUser = null;
 let currentSection = "dashboard";
 
@@ -141,7 +136,18 @@ function showSection(section) {
 }
 
 // =======================
-// Dashboard
+// Função genérica Toast
+// =======================
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// =======================
+// DASHBOARD
 // =======================
 async function loadDashboard() {
   try {
@@ -164,21 +170,16 @@ async function loadDashboard() {
 }
 
 // =======================
-// Posts
+// POSTS
 // =======================
 async function loadPosts() {
   try {
-    const { data: posts } = await supabaseAdmin
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false });
-
+    const { data: posts } = await supabaseAdmin.from("posts").select("*").order("created_at", { ascending: false });
     const container = document.getElementById("posts-table-body");
     if (!posts?.length) {
       container.innerHTML = '<tr><td colspan="5">Nenhuma postagem encontrada</td></tr>';
       return;
     }
-
     container.innerHTML = posts
       .map(
         (post) => `
@@ -203,167 +204,6 @@ async function loadPosts() {
   }
 }
 
-// =======================
-// Ads
-// =======================
-async function loadAds() {
-  try {
-    const { data: ads } = await supabaseAdmin.from("advertisements").select("*").order("created_at", { ascending: false });
-    const container = document.getElementById("ads-table-body");
-    if (!ads?.length) {
-      container.innerHTML = '<tr><td colspan="5">Nenhum anúncio encontrado</td></tr>';
-      return;
-    }
-    container.innerHTML = ads
-      .map(
-        (ad) => `
-      <tr>
-        <td>${ad.title}</td>
-        <td>${ad.is_active ? "Ativo" : "Inativo"}</td>
-        <td>${new Date(ad.created_at).toLocaleDateString("pt-BR")}</td>
-        <td>
-          <button onclick="editAd('${ad.id}')">Editar</button>
-          <button onclick="toggleAd('${ad.id}', ${ad.is_active})">${ad.is_active ? "Desativar" : "Ativar"}</button>
-          <button onclick="deleteAd('${ad.id}')">Excluir</button>
-        </td>
-      </tr>`
-      )
-      .join("");
-  } catch (err) {
-    console.error(err);
-    showToast("Erro ao carregar anúncios!");
-  }
-}
-
-// =======================
-// Quick Links
-// =======================
-async function loadQuickLinks() {
-  try {
-    const { data: links } = await supabaseAdmin.from("quick_links").select("*").order("created_at", { ascending: false });
-    const container = document.getElementById("links-table-body");
-    if (!links?.length) {
-      container.innerHTML = '<tr><td colspan="4">Nenhum link encontrado</td></tr>';
-      return;
-    }
-    container.innerHTML = links
-      .map(
-        (link) => `
-      <tr>
-        <td>${link.name}</td>
-        <td>${link.url}</td>
-        <td>${new Date(link.created_at).toLocaleDateString("pt-BR")}</td>
-        <td>
-          <button onclick="editLink('${link.id}')">Editar</button>
-          <button onclick="deleteLink('${link.id}')">Excluir</button>
-        </td>
-      </tr>`
-      )
-      .join("");
-  } catch (err) {
-    console.error(err);
-    showToast("Erro ao carregar links!");
-  }
-}
-
-// =======================
-// Users
-// =======================
-async function loadUsers() {
-  try {
-    const { data: users } = await supabaseAdmin.from("users").select("*").order("created_at", { ascending: false });
-    const container = document.getElementById("users-table-body");
-    if (!users?.length) {
-      container.innerHTML = '<tr><td colspan="5">Nenhum usuário encontrado</td></tr>';
-      return;
-    }
-    container.innerHTML = users
-      .map(
-        (user) => `
-      <tr>
-        <td>${user.name}</td>
-        <td>${user.email}</td>
-        <td>${user.role}</td>
-        <td>${user.is_active ? "Ativo" : "Inativo"}</td>
-        <td>
-          <button onclick="editUser('${user.id}')">Editar</button>
-          <button onclick="toggleUser('${user.id}', ${user.is_active})">${user.is_active ? "Desativar" : "Ativar"}</button>
-          <button onclick="deleteUser('${user.id}')">Excluir</button>
-        </td>
-      </tr>`
-      )
-      .join("");
-  } catch (err) {
-    console.error(err);
-    showToast("Erro ao carregar usuários!");
-  }
-}
-
-// =======================
-// Settings
-// =======================
-async function loadSettings() {
-  try {
-    const { data: settings } = await supabaseAdmin.from("settings").select("*").single();
-    if (!settings) return;
-
-    document.getElementById("contact-email").value = settings.contact_email || "";
-    document.getElementById("facebook-url").value = settings.facebook || "";
-    document.getElementById("theme-color").value = settings.theme_color || "#000000";
-  } catch (err) {
-    console.error(err);
-    showToast("Erro ao carregar configurações!");
-  }
-}
-
-// =======================
-// Visibility
-// =======================
-async function loadVisibility() {
-  try {
-    const { data: items } = await supabaseAdmin.from("visibility").select("*").order("created_at", { ascending: false });
-    const container = document.getElementById("visibility-table-body");
-    if (!items?.length) {
-      container.innerHTML = '<tr><td colspan="4">Nenhum item encontrado</td></tr>';
-      return;
-    }
-    container.innerHTML = items
-      .map(
-        (item) => `
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.is_visible ? "Visível" : "Oculto"}</td>
-        <td>${new Date(item.created_at).toLocaleDateString("pt-BR")}</td>
-        <td>
-          <button onclick="toggleVisibility('${item.id}', ${item.is_visible})">${
-          item.is_visible ? "Ocultar" : "Mostrar"
-        }</button>
-        </td>
-      </tr>`
-      )
-      .join("");
-  } catch (err) {
-    console.error(err);
-    showToast("Erro ao carregar visibilidade!");
-  }
-}
-
-// =======================
-// Função genérica Toast
-// =======================
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-
-
-// =======================
-// POSTS
-// =======================
 async function savePost(e) {
   e.preventDefault();
   try {
@@ -378,16 +218,11 @@ async function savePost(e) {
 
     let res;
     if (id) {
-      res = await supabaseAdmin
-        .from("posts")
-        .update({ title, content, image_url, is_visible })
-        .eq("id", id);
+      res = await supabaseAdmin.from("posts").update({ title, content, image_url, is_visible }).eq("id", id);
     } else {
       res = await supabaseAdmin.from("posts").insert([{ title, content, image_url, is_visible }]);
     }
-
     if (res.error) throw res.error;
-
     showToast("Post salvo com sucesso!");
     form.reset();
     loadPosts();
@@ -401,7 +236,6 @@ async function editPost(id) {
   try {
     const { data } = await supabaseAdmin.from("posts").select("*").eq("id", id).single();
     if (!data) return;
-
     const form = document.getElementById("post-form");
     form.dataset.id = data.id;
     form.title.value = data.title;
@@ -440,6 +274,35 @@ async function deletePost(id) {
 // =======================
 // ADS
 // =======================
+async function loadAds() {
+  try {
+    const { data: ads } = await supabaseAdmin.from("advertisements").select("*").order("created_at", { ascending: false });
+    const container = document.getElementById("ads-table-body");
+    if (!ads?.length) {
+      container.innerHTML = '<tr><td colspan="5">Nenhum anúncio encontrado</td></tr>';
+      return;
+    }
+    container.innerHTML = ads
+      .map(
+        (ad) => `
+      <tr>
+        <td>${ad.title}</td>
+        <td>${ad.is_active ? "Ativo" : "Inativo"}</td>
+        <td>${new Date(ad.created_at).toLocaleDateString("pt-BR")}</td>
+        <td>
+          <button onclick="editAd('${ad.id}')">Editar</button>
+          <button onclick="toggleAd('${ad.id}', ${ad.is_active})">${ad.is_active ? "Desativar" : "Ativar"}</button>
+          <button onclick="deleteAd('${ad.id}')">Excluir</button>
+        </td>
+      </tr>`
+      )
+      .join("");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar anúncios!");
+  }
+}
+
 async function saveAd(e) {
   e.preventDefault();
   try {
@@ -451,14 +314,12 @@ async function saveAd(e) {
 
     if (!title) return showToast("Título obrigatório!");
 
-    let res;
     if (id) {
-      res = await supabaseAdmin.from("advertisements").update({ title, link, is_active }).eq("id", id);
+      await supabaseAdmin.from("advertisements").update({ title, link, is_active }).eq("id", id);
     } else {
-      res = await supabaseAdmin.from("advertisements").insert([{ title, link, is_active }]);
+      await supabaseAdmin.from("advertisements").insert([{ title, link, is_active }]);
     }
 
-    if (res.error) throw res.error;
     showToast("Anúncio salvo!");
     form.reset();
     loadAds();
@@ -472,7 +333,6 @@ async function editAd(id) {
   try {
     const { data } = await supabaseAdmin.from("advertisements").select("*").eq("id", id).single();
     if (!data) return;
-
     const form = document.getElementById("ad-form");
     form.dataset.id = data.id;
     form.title.value = data.title;
@@ -510,6 +370,34 @@ async function deleteAd(id) {
 // =======================
 // QUICK LINKS
 // =======================
+async function loadQuickLinks() {
+  try {
+    const { data: links } = await supabaseAdmin.from("quick_links").select("*").order("created_at", { ascending: false });
+    const container = document.getElementById("links-table-body");
+    if (!links?.length) {
+      container.innerHTML = '<tr><td colspan="4">Nenhum link encontrado</td></tr>';
+      return;
+    }
+    container.innerHTML = links
+      .map(
+        (link) => `
+      <tr>
+        <td>${link.name}</td>
+        <td>${link.url}</td>
+        <td>${new Date(link.created_at).toLocaleDateString("pt-BR")}</td>
+        <td>
+          <button onclick="editLink('${link.id}')">Editar</button>
+          <button onclick="deleteLink('${link.id}')">Excluir</button>
+        </td>
+      </tr>`
+      )
+      .join("");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar links!");
+  }
+}
+
 async function saveLink(e) {
   e.preventDefault();
   try {
@@ -517,15 +405,12 @@ async function saveLink(e) {
     const id = form.dataset.id || null;
     const name = form.name.value;
     const url = form.url.value;
-
     if (!name || !url) return showToast("Preencha todos os campos!");
-
     if (id) {
       await supabaseAdmin.from("quick_links").update({ name, url }).eq("id", id);
     } else {
       await supabaseAdmin.from("quick_links").insert([{ name, url }]);
     }
-
     showToast("Link salvo!");
     form.reset();
     loadQuickLinks();
@@ -539,7 +424,6 @@ async function editLink(id) {
   try {
     const { data } = await supabaseAdmin.from("quick_links").select("*").eq("id", id).single();
     if (!data) return;
-
     const form = document.getElementById("link-form");
     form.dataset.id = data.id;
     form.name.value = data.name;
@@ -565,6 +449,36 @@ async function deleteLink(id) {
 // =======================
 // USERS
 // =======================
+async function loadUsers() {
+  try {
+    const { data: users } = await supabaseAdmin.from("users").select("*").order("created_at", { ascending: false });
+    const container = document.getElementById("users-table-body");
+    if (!users?.length) {
+      container.innerHTML = '<tr><td colspan="5">Nenhum usuário encontrado</td></tr>';
+      return;
+    }
+    container.innerHTML = users
+      .map(
+        (user) => `
+      <tr>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.role}</td>
+        <td>${user.is_active ? "Ativo" : "Inativo"}</td>
+        <td>
+          <button onclick="editUser('${user.id}')">Editar</button>
+          <button onclick="toggleUser('${user.id}', ${user.is_active})">${user.is_active ? "Desativar" : "Ativar"}</button>
+          <button onclick="deleteUser('${user.id}')">Excluir</button>
+        </td>
+      </tr>`
+      )
+      .join("");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar usuários!");
+  }
+}
+
 async function saveUser(e) {
   e.preventDefault();
   try {
@@ -576,13 +490,11 @@ async function saveUser(e) {
     const is_active = form.is_active.checked;
 
     if (!name || !email || !role) return showToast("Preencha todos os campos!");
-
     if (id) {
       await supabaseAdmin.from("users").update({ name, email, role, is_active }).eq("id", id);
     } else {
       await supabaseAdmin.from("users").insert([{ name, email, role, is_active }]);
     }
-
     showToast("Usuário salvo!");
     form.reset();
     loadUsers();
@@ -596,7 +508,6 @@ async function editUser(id) {
   try {
     const { data } = await supabaseAdmin.from("users").select("*").eq("id", id).single();
     if (!data) return;
-
     const form = document.getElementById("user-form");
     form.dataset.id = data.id;
     form.name.value = data.name;
@@ -635,6 +546,19 @@ async function deleteUser(id) {
 // =======================
 // SETTINGS
 // =======================
+async function loadSettings() {
+  try {
+    const { data: settings } = await supabaseAdmin.from("settings").select("*").single();
+    if (!settings) return;
+    document.getElementById("contact-email").value = settings.contact_email || "";
+    document.getElementById("facebook-url").value = settings.facebook || "";
+    document.getElementById("theme-color").value = settings.theme_color || "#000000";
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar configurações!");
+  }
+}
+
 async function saveContactSettings(e) {
   e.preventDefault();
   try {
@@ -677,6 +601,35 @@ async function saveColorSettings(e) {
 // =======================
 // VISIBILITY
 // =======================
+async function loadVisibility() {
+  try {
+    const { data: items } = await supabaseAdmin.from("visibility").select("*").order("created_at", { ascending: false });
+    const container = document.getElementById("visibility-table-body");
+    if (!items?.length) {
+      container.innerHTML = '<tr><td colspan="4">Nenhum item encontrado</td></tr>';
+      return;
+    }
+    container.innerHTML = items
+      .map(
+        (item) => `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.is_visible ? "Visível" : "Oculto"}</td>
+        <td>${new Date(item.created_at).toLocaleDateString("pt-BR")}</td>
+        <td>
+          <button onclick="toggleVisibility('${item.id}', ${item.is_visible})">${
+          item.is_visible ? "Ocultar" : "Mostrar"
+        }</button>
+        </td>
+      </tr>`
+      )
+      .join("");
+  } catch (err) {
+    console.error(err);
+    showToast("Erro ao carregar visibilidade!");
+  }
+}
+
 async function toggleVisibility(id, current) {
   try {
     await supabaseAdmin.from("visibility").update({ is_visible: !current }).eq("id", id);
@@ -696,8 +649,7 @@ async function resetPassword(e) {
   try {
     const email = document.getElementById("reset-email").value;
     if (!email) return showToast("Digite um email!");
-
-    await supabaseAdmin.auth.api.resetPasswordForEmail(email);
+    await supabaseAdmin.auth.resetPasswordForEmail(email);
     showToast("Email de redefinição enviado!");
     e.target.reset();
   } catch (err) {
@@ -705,17 +657,3 @@ async function resetPassword(e) {
     showToast("Erro ao enviar email de redefinição!");
   }
 }
-
-// =======================
-// Aqui você implementa:
-// savePost, saveAd, saveLink, saveUser, saveContactSettings, saveSocialSettings, saveColorSettings, resetPassword
-// editPost, togglePostVisibility, deletePost
-// editAd, toggleAd, deleteAd
-// editLink, deleteLink
-// editUser, toggleUser, deleteUser
-// toggleVisibility
-// =======================
-
-// Essa parte depende de como você já tem os formulários e endpoints.
-// Todos devem usar try/catch e supabaseAdmin para enviar/atualizar dados.
-
