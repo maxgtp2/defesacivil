@@ -144,17 +144,6 @@ function renderPosts() {
   updateCarouselButtons()
 }
 
-// Initialize Carousel
-function initCarousel() {
-  const prevBtn = document.getElementById("prev-btn")
-  const nextBtn = document.getElementById("next-btn")
-
-  if (prevBtn) prevBtn.addEventListener("click", prevSlide)
-  if (nextBtn) nextBtn.addEventListener("click", nextSlide)
-
-  updateCarouselButtons()
-}
-
 // Render Carousel Dots
 function renderDots() {
   const dotsContainer = document.getElementById("carousel-dots")
@@ -167,48 +156,11 @@ function renderDots() {
   dotsContainer.innerHTML = dotsHTML
 }
 
-// Carousel Navigation
-function nextSlide() {
-  if (currentSlide < totalSlides - 1) {
-    currentSlide++
-    updateCarousel()
-  }
-}
-
-function prevSlide() {
-  if (currentSlide > 0) {
-    currentSlide--
-    updateCarousel()
-  }
-}
-
-function goToSlide(index) {
-  currentSlide = index
-  updateCarousel()
-}
-
-function updateCarousel() {
-  const track = document.getElementById("news-carousel-track")
-  if (track) {
-    track.style.transform = `translateX(-${currentSlide * 100}%)`
-  }
-
   // Update dots
   const dots = document.querySelectorAll(".carousel-dot")
   dots.forEach((dot, index) => {
     dot.classList.toggle("active", index === currentSlide)
   })
-
-  updateCarouselButtons()
-}
-
-function updateCarouselButtons() {
-  const prevBtn = document.getElementById("prev-btn")
-  const nextBtn = document.getElementById("next-btn")
-
-  if (prevBtn) prevBtn.disabled = currentSlide === 0
-  if (nextBtn) nextBtn.disabled = currentSlide >= totalSlides - 1
-}
 
 // Load Quick Links
 async function loadQuickLinks() {
