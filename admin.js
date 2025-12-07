@@ -2,10 +2,24 @@
 // Admin Panel Completo
 // =======================
 
-window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
-window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
+// =======================
+// Configurações Supabase (seguro para múltiplos scripts)
+// =======================
+if (!window.SUPABASE_URL) {
+  window.SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co";
+}
 
-const supabaseAdmin = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+if (!window.SUPABASE_ANON_KEY) {
+  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
+}
+
+// Cria o cliente Supabase
+const supabaseAdmin = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
+
+
 
 
 let currentUser = null;
