@@ -2,11 +2,11 @@
 // Admin Panel Completo
 // =======================
 
-const SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxaWh4cnJ3dWNiZndyZnlqaGF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5Nzc5NTgsImV4cCI6MjA4MDU1Mzk1OH0.Vzqrk2oQNfMj8KRcXlcQkk1-4WNmxMWetCNCMA6-8RM";
+window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
+window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
-const supabaseAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseAdmin = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
 
 let currentUser = null;
 let currentSection = "dashboard";
