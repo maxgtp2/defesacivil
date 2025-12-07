@@ -1,3 +1,5 @@
+import { supabaseAdmin } from "./config.js";
+
 let currentUser = null
 let currentSection = "dashboard"
 
