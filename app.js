@@ -1,4 +1,9 @@
+// Supabase Configuration
+const SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co"
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxaWh4cnJ3dWNiZndyZnlqaGF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNDM2MTcsImV4cCI6MjA2NDgxOTYxN30.xsRicBxetP0OOjNVj2gCVavGMKLmAgVdcZ7M68gkx0c"
 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // State
 let posts = []
