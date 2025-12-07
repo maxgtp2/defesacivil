@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Defesa Civil - Cidade Ocidental</title>
     <meta name="description" content="Defesa Civil de Cidade Ocidental - GO. Proteção e segurança para a população.">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Supabase Client -->
+    
+    <!-- Supabase Client (opcional, caso use backend) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -25,7 +30,6 @@
     <nav class="navbar">
         <div class="container navbar-content">
             <div class="logo">
-                <!-- URL corrigida para GitHub Pages -->
                 <img src="https://maxgtp2.github.io/defesacivil/public/images/logo2.png" alt="Logo Defesa Civil" class="logo-image">
                 <div class="logo-text">
                     <span class="logo-title">DEFESA CIVIL</span>
@@ -33,9 +37,7 @@
                 </div>
             </div>
             <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#inicio">Início</a></li>
@@ -56,275 +58,61 @@
             <h1 class="hero-title">Defesa Civil<br>Cidade Ocidental</h1>
             <p class="hero-description">Trabalhando pela segurança e bem-estar da população. Prevenção, preparação e resposta a emergências.</p>
             <div class="hero-buttons">
-                <a href="tel:199" class="btn btn-primary btn-lg">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                        <path d="M22 16.92V19.92C22 20.48 21.56 20.96 20.96 21C20.4 21.04 19.88 21.08 19.32 21.08C10.32 20.96 3.04 13.68 2.92 4.68C2.88 4.16 2.92 3.6 2.96 3.04C3 2.44 3.48 2 4.04 2H7.04C7.56 2 8 2.4 8.04 2.92C8.08 3.52 8.16 4.08 8.32 4.64C8.44 5.08 8.32 5.56 7.96 5.92L6.36 7.52C7.72 10.04 9.96 12.28 12.48 13.64L14.08 12.04C14.44 11.68 14.92 11.56 15.36 11.68C15.92 11.84 16.48 11.92 17.08 11.96C17.6 12 18 12.44 18 12.96V16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Ligar 199
-                </a>
+                <a href="tel:199" class="btn btn-primary btn-lg">Ligar 199</a>
                 <a href="#servicos" class="btn btn-outline btn-lg">Ver Serviços</a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number" id="visit-count">0</span>
-                    <span class="stat-label">Visitas</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">199</span>
-                    <span class="stat-label">Emergência</span>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Content with Sidebars -->
-    <div class="main-wrapper">
-        <!-- Left Sidebar Ads -->
-        <aside class="sidebar sidebar-left" id="sidebar_ads">
-            <div id="sidebar-ads-left"></div>
-        </aside>
+    <!-- Main Content -->
+    <main class="main-wrapper">
+        <!-- Quick Access / Services -->
+        <section class="section quick-access" id="servicos">
+            <div class="container">
+                <h2>Serviços da Prefeitura</h2>
+                <div class="services-grid" id="quick-links-container"></div>
+            </div>
+        </section>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Quick Access Section -->
-            <section class="section quick-access" id="servicos">
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-badge">Acesso Rápido</span>
-                        <h2 class="section-title">Serviços da Prefeitura</h2>
-                        <p class="section-description">Acesse os principais serviços do município de forma rápida e fácil</p>
-                    </div>
-                    <div class="services-grid" id="quick-links-container">
-                        <!-- Quick links loaded dynamically -->
-                    </div>
-                </div>
-            </section>
+        <!-- News Section -->
+        <section class="section news-section" id="noticias">
+            <div class="container">
+                <h2>Últimas Notícias</h2>
+                <div id="news-carousel-track" class="news-carousel-track"></div>
+            </div>
+        </section>
 
-            <!-- News Section -->
-            <section class="section news-section" id="noticias">
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-badge">Últimas Notícias</span>
-                        <h2 class="section-title">Fique Informado</h2>
-                        <p class="section-description">Acompanhe as últimas notícias e atualizações da Defesa Civil</p>
-                    </div>
-                    
-                    <!-- News Carousel -->
-                    <div class="news-carousel">
-                        <div class="news-carousel-track" id="news-carousel-track">
-                            <!-- Posts loaded dynamically -->
-                        </div>
-                    </div>
+        <!-- Alerts Section -->
+        <section class="section alerts-section" id="alertas">
+            <div class="container">
+                <h2>Alertas e Avisos</h2>
+                <div class="alerts-grid"></div>
+            </div>
+        </section>
 
-                    <!-- Carousel Navigation -->
-                    <div class="carousel-nav">
-                        <button class="carousel-btn prev" id="prev-btn" onclick="prevSlide()">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                        <div class="carousel-dots" id="carousel-dots"></div>
-                        <button class="carousel-btn next" id="next-btn" onclick="nextSlide()">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Between Posts Ads -->
-                    <div id="between-posts-ads" class="between-posts-ads"></div>
-
-                    <div class="instagram-cta">
-                        <a href="https://www.instagram.com/defesacivil_co/" target="_blank" class="btn btn-instagram">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-                                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-                                <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
-                            </svg>
-                            Siga-nos no Instagram @defesacivil_co
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Alerts Section -->
-            <section class="section alerts-section" id="alertas">
-                <div class="container">
-                    <div class="section-header">
-                        <span class="section-badge warning">Alertas</span>
-                        <h2 class="section-title">Alertas e Avisos</h2>
-                    </div>
-                    <div class="alerts-grid">
-                        <div class="alert-card info">
-                            <div class="alert-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <div class="alert-content">
-                                <h3>Período de Chuvas</h3>
-                                <p>Atenção redobrada em áreas de risco. Evite construções próximas a encostas e margens de rios.</p>
-                            </div>
-                        </div>
-                        <div class="alert-card warning">
-                            <div class="alert-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 9V13M12 17H12.01M4.93 19H19.07C20.4 19 21.24 17.54 20.57 16.4L13.5 4.27C12.83 3.13 11.17 3.13 10.5 4.27L3.43 16.4C2.76 17.54 3.6 19 4.93 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div class="alert-content">
-                                <h3>Queimadas</h3>
-                                <p>Denuncie queimadas irregulares. Período de seca exige cuidado redobrado com fogo.</p>
-                            </div>
-                        </div>
-                        <div class="alert-card success">
-                            <div class="alert-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 11.08V12C21.99 14.82 21.04 17.55 19.29 19.72C17.54 21.88 15.09 23.36 12.35 23.91C9.61 24.46 6.77 24.05 4.32 22.75C1.86 21.45 -0.04 19.33 -1.01 16.75C-1.98 14.17 -1.97 11.31 -0.98 8.74C0.01 6.17 1.93 4.06 4.39 2.78C6.85 1.5 9.68 1.12 12.42 1.69C15.16 2.26 17.59 3.76 19.32 5.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div class="alert-content">
-                                <h3>Cadastro Atualizado</h3>
-                                <p>Mantenha seu cadastro atualizado para receber alertas via SMS em casos de emergência.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Contact Section -->
-            <section class="section contact-section" id="contato">
-                <div class="container">
-                    <div class="contact-grid">
-                        <div class="contact-info">
-                            <span class="section-badge">Contato</span>
-                            <h2 class="section-title">Fale Conosco</h2>
-                            <p class="section-description">Entre em contato com a Defesa Civil de Cidade Ocidental</p>
-                            
-                            <div class="contact-items">
-                                <div class="contact-item">
-                                    <div class="contact-icon emergency">
-                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M22 16.92V19.92C22 20.48 21.56 20.96 20.96 21C20.4 21.04 19.88 21.08 19.32 21.08C10.32 20.96 3.04 13.68 2.92 4.68C2.88 4.16 2.92 3.6 2.96 3.04C3 2.44 3.48 2 4.04 2H7.04C7.56 2 8 2.4 8.04 2.92C8.08 3.52 8.16 4.08 8.32 4.64C8.44 5.08 8.32 5.56 7.96 5.92L6.36 7.52C7.72 10.04 9.96 12.28 12.48 13.64L14.08 12.04C14.44 11.68 14.92 11.56 15.36 11.68C15.92 11.84 16.48 11.92 17.08 11.96C17.6 12 18 12.44 18 12.96V16.92Z" stroke="currentColor" stroke-width="2"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <strong>Emergência</strong>
-                                        <span id="contact-emergency">199</span>
-                                    </div>
-                                </div>
-                                <div class="contact-item">
-                                    <div class="contact-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2"/>
-                                            <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <strong>E-mail</strong>
-                                        <span id="contact-email">defesacivil@cidadeocidental.go.gov.br</span>
-                                    </div>
-                                </div>
-                                <div class="contact-item">
-                                    <div class="contact-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
-                                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <strong>Endereço</strong>
-                                        <span id="contact-address">Cidade Ocidental - GO</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="contact-form-wrapper">
-                            <form class="contact-form" onsubmit="return false;">
-                                <div class="form-group">
-                                    <label for="name">Nome</label>
-                                    <input type="text" id="name" name="name" required placeholder="Seu nome completo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">E-mail</label>
-                                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message">Mensagem</label>
-                                    <textarea id="message" name="message" rows="4" required placeholder="Digite sua mensagem..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-full">Enviar Mensagem</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Right Sidebar Ads -->
-        <aside class="sidebar sidebar-right" id="sidebar_ads">
-            <div id="sidebar-ads-right"></div>
-        </aside>
-    </div>
+        <!-- Contact Section -->
+        <section class="section contact-section" id="contato">
+            <div class="container">
+                <h2>Fale Conosco</h2>
+                <form class="contact-form" onsubmit="return false;">
+                    <input type="text" placeholder="Nome" required>
+                    <input type="email" placeholder="E-mail" required>
+                    <textarea placeholder="Mensagem" rows="4" required></textarea>
+                    <button type="submit" class="btn btn-primary btn-full">Enviar Mensagem</button>
+                </form>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer" id="footer">
+    <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <!-- URL corrigida para GitHub Pages -->
-                        <img src="https://maxgtp2.github.io/defesacivil/public/images/logo2.png" alt="Logo Defesa Civil" class="logo-image footer-logo">
-                        <div class="logo-text">
-                            <span class="logo-title">DEFESA CIVIL</span>
-                            <span class="logo-subtitle">Cidade Ocidental - GO</span>
-                        </div>
-                    </div>
-                    <p class="footer-description">Proteção e segurança para a população de Cidade Ocidental.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Links Úteis</h4>
-                    <ul>
-                        <li><a href="https://www.cidadeocidental.go.gov.br/" target="_blank">Prefeitura Municipal</a></li>
-                        <li><a href="https://www.instagram.com/defesacivil_co/" target="_blank">Instagram</a></li>
-                        <li><a href="#servicos">Serviços</a></li>
-                        <li><a href="#contato">Contato</a></li>
-                    </ul>
-                </div>
-                <div class="footer-emergency">
-                    <h4>Emergência</h4>
-                    <div class="emergency-numbers">
-                        <div class="emergency-number">
-                            <span class="number">199</span>
-                            <span class="label">Defesa Civil</span>
-                        </div>
-                        <div class="emergency-number">
-                            <span class="number">193</span>
-                            <span class="label">Bombeiros</span>
-                        </div>
-                        <div class="emergency-number">
-                            <span class="number">190</span>
-                            <span class="label">Polícia</span>
-                        </div>
-                        <div class="emergency-number">
-                            <span class="number">192</span>
-                            <span class="label">SAMU</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Defesa Civil - Cidade Ocidental. Todos os direitos reservados.</p>
-                <div class="visit-counter" id="visit_counter">
-                    <span>Visitas: </span>
-                    <strong id="footer-visit-count">0</strong>
-                </div>
-            </div>
+            <p>&copy; 2025 Defesa Civil - Cidade Ocidental. Todos os direitos reservados.</p>
+            <div>Visitas: <strong id="footer-visit-count">0</strong></div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="app.js"></script>
 </body>
 </html>
