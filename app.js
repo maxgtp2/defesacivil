@@ -20,6 +20,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   initCarousel()
 })
 
+// Load Site Settings
+async function loadSettings() {
+  try {
+    const { data, error } = await supabase.from("site_settings").select("*")
+    if (error) throw error
+
+    if (data) {
+      data.forEach((setting) => {
+        const value = setting.value ? JSON.parse(setting.value) : setting.value
+
+        switch (setting.key) {
+          case "primary_color":
+            document.documentElement.style.setProperty("--primary", value)
+            break
+          case "secondary_color":
+            document.documentElement.style.setProperty("--secondary", value)
+            break
+          case "emergency_phone":
+            const emergencyEl = document.getElementById("emergency-phone")
+            const contactEmergency = document.getElementById("contact-emergency")
+            if (emergencyEl) emergencyEl.textContent = value
+            if (contactEmergency) contactEmergency.textContent = value
+            break
+          case "contact_email":
+            const emailEl = document.getElementById("contact-email")
+            if (emailEl) emailEl.textContent = value
+            break
+          case "address":
+            const addressEl = document.getElementById("contact-address")
+            if (addressEl) addressEl.textContent = value
+            break
+        }
+      })
+    }
+  } catch (error) {
+    console.error("Error loading settings:", error)
+  }
+}
+
 // Load Posts
 async function loadPosts() {
   try {
@@ -45,33 +84,51 @@ function renderPosts() {
 
   if (posts.length === 0) {
     track.innerHTML =
-      '<p style="text-align:center; padding:2rem;">Nenhuma notícia disponível.</p>'
+      '<p style="text-align: center; padding: 2rem; color: var(--foreground-muted);">Nenhuma notícia disponível no momento.</p>'
     return
   }
 
+  // Create slides with 6 posts per slide
   const postsPerSlide = 6
   totalSlides = Math.ceil(posts.length / postsPerSlide)
+
   let slidesHTML = ""
 
   for (let i = 0; i < totalSlides; i++) {
-    const slidePosts = posts.slice(i * postsPerSlide, i * postsPerSlide + postsPerSlide)
-    slidesHTML += `<div class="news-slide">`
+    const slideStart = i * postsPerSlide
+    const slidePosts = posts.slice(slideStart, slideStart + postsPerSlide)
 
-    slidePosts.forEach(post => {
+    slidesHTML += `<div class="news-slide" style="flex: 0 0 100%;">`
+
+    slidePosts.forEach((post) => {
       const date = new Date(post.created_at).toLocaleDateString("pt-BR", {
-        day: "2-digit", month: "long", year: "numeric"
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
       })
 
       slidesHTML += `
         <article class="news-card">
           <div class="news-image">
-            <img src="${post.image_url || '/news-collage.png'}" alt="${post.title}">
+            <img src="${post.image_url || "/news-collage.png"}" alt="${post.title}">
+            <span class="news-tag">Notícia</span>
           </div>
           <div class="news-content">
-            <span class="news-date">${date}</span>
+            <span class="news-date">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              ${date}
+            </span>
             <h3 class="news-title">${post.title}</h3>
             <p class="news-excerpt">${post.content || ""}</p>
-            <a href="${post.external_link || '#'}" class="news-link" target="_blank">Ver mais</a>
+            <a href="${post.external_link || "https://www.instagram.com/defesacivil_co/"}" class="news-link" target="_blank">
+              Ver no Instagram
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
         </article>
       `
@@ -80,38 +137,67 @@ function renderPosts() {
     slidesHTML += `</div>`
   }
 
+  track.style.display = "flex"
+  track.style.transition = "transform 0.5s ease"
   track.innerHTML = slidesHTML
   renderDots()
-  updateCarousel()
+  updateCarouselButtons()
 }
 
 // Initialize Carousel
 function initCarousel() {
+  const prevBtn = document.getElementById("prev-btn")
+  const nextBtn = document.getElementById("next-btn")
+
+  if (prevBtn) prevBtn.addEventListener("click", prevSlide)
+  if (nextBtn) nextBtn.addEventListener("click", nextSlide)
+
   updateCarouselButtons()
 }
 
-// Carousel Dots
+// Render Carousel Dots
 function renderDots() {
   const dotsContainer = document.getElementById("carousel-dots")
   if (!dotsContainer) return
 
-  dotsContainer.innerHTML = Array.from({length: totalSlides}).map((_, i) =>
-    `<span class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></span>`
-  ).join('')
+  let dotsHTML = ""
+  for (let i = 0; i < totalSlides; i++) {
+    dotsHTML += `<span class="carousel-dot ${i === 0 ? "active" : ""}" onclick="goToSlide(${i})"></span>`
+  }
+  dotsContainer.innerHTML = dotsHTML
 }
 
-// Navigation
-function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateCarousel() } }
-function prevSlide() { if (currentSlide > 0) { currentSlide--; updateCarousel() } }
-function goToSlide(index) { currentSlide = index; updateCarousel() }
+// Carousel Navigation
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++
+    updateCarousel()
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--
+    updateCarousel()
+  }
+}
+
+function goToSlide(index) {
+  currentSlide = index
+  updateCarousel()
+}
 
 function updateCarousel() {
   const track = document.getElementById("news-carousel-track")
-  if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`
+  if (track) {
+    track.style.transform = `translateX(-${currentSlide * 100}%)`
+  }
 
-  document.querySelectorAll(".carousel-dot").forEach((dot, i) =>
-    dot.classList.toggle("active", i === currentSlide)
-  )
+  // Update dots
+  const dots = document.querySelectorAll(".carousel-dot")
+  dots.forEach((dot, index) => {
+    dot.classList.toggle("active", index === currentSlide)
+  })
 
   updateCarouselButtons()
 }
