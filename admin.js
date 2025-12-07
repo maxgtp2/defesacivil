@@ -1,13 +1,9 @@
 // =======================
-// Admin Panel Completo
-// =======================
-
-// =======================
 // Configurações Supabase
 // =======================
 window.SUPABASE_URL = window.SUPABASE_URL || "https://tqihxrrwucbfwrfyjhav.supabase.co";
-window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
-const supabaseAdmin = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "COLOQUE_SUA_CHAVE_AQUI_SEM_RETICENCIAS";
+const supabaseAdmin = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 // =======================
 // Estado Global
@@ -162,7 +158,7 @@ async function loadDashboard() {
 }
 
 // =======================
-// UPLOAD E PREVIEW DE IMAGENS
+// Upload e preview de imagens
 // =======================
 function setupImagePreviews() {
   document.querySelectorAll('input[type="file"][data-preview]').forEach((input) => {
@@ -176,16 +172,13 @@ function setupImagePreviews() {
       };
       reader.readAsDataURL(file);
 
-      // Upload no Supabase Storage
       try {
         const fileName = `${Date.now()}_${file.name}`;
         const { data, error } = await supabaseAdmin.storage
           .from("uploads")
           .upload(fileName, file, { cacheControl: "3600", upsert: true });
         if (error) throw error;
-        const { publicUrl, error: urlError } = supabaseAdmin.storage
-          .from("uploads")
-          .getPublicUrl(fileName);
+        const { publicUrl, error: urlError } = supabaseAdmin.storage.from("uploads").getPublicUrl(fileName);
         if (urlError) throw urlError;
         input.dataset.url = publicUrl;
       } catch (err) {
