@@ -1,6 +1,9 @@
 // =======================
 // Configurações Supabase
 // =======================
+// Primeiro, garanta que o script do Supabase esteja carregado no HTML:
+// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 const SUPABASE_URL = "https://tqihxrrwucbfwrfyjhav.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 const supabaseAdmin = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
