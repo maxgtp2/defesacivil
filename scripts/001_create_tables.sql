@@ -85,7 +85,7 @@ INSERT INTO visit_counter (count) VALUES (0) ON CONFLICT DO NOTHING;
 -- Inserir configurações padrão do site
 INSERT INTO site_settings (key, value) VALUES 
   ('colors', '{"primary": "#f97316", "secondary": "#1e40af", "accent": "#059669", "background": "#ffffff", "text": "#1f2937"}'::jsonb),
-  ('logo', '{"url": "https://maxgtp2.github.io/defesacivil/public/images/logo2.png", "alt": "Defesa Civil Cidade Ocidental"}'::jsonb),
+  ('logo', '{"url": "/images/logo2.png", "alt": "Defesa Civil Cidade Ocidental"}'::jsonb),
   ('contact', '{"phone": "199", "email": "defesacivil@cidadeocidental.go.gov.br", "address": "Cidade Ocidental - GO"}'::jsonb),
   ('social', '{"instagram": "https://www.instagram.com/defesacivil_co/", "facebook": "", "twitter": ""}'::jsonb)
 ON CONFLICT (key) DO NOTHING;
