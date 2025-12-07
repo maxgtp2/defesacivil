@@ -1,49 +1,104 @@
-// ===== Navegação entre seções =====
-const navItems = document.querySelectorAll('.nav-item');
-navItems.forEach(item => {
-  item.addEventListener('click', e => {
-    e.preventDefault();
-    const section = item.dataset.section;
-    showSection(section);
-  });
+// Navegação entre seções
+const sidebarItems = document.querySelectorAll('#sidebar li');
+const sections = document.querySelectorAll('.section');
+
+sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+        // ativa o item selecionado
+        sidebarItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        // mostra a seção correspondente
+        const sectionId = item.dataset.section;
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    });
 });
 
-function showSection(section) {
-  document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
-  const activeSection = document.getElementById(`section-${section}`);
-  if(activeSection) activeSection.classList.add('active');
+// Funções para buscar dados do backend
+async function fetchDashboard() {
+    try {
+        const res = await fetch('/api/dashboard'); // rota do backend
+        const data = await res.json();
+        document.getElementById('total-posts').textContent = data.totalPosts;
+        document.getElementById('total-users').textContent = data.totalUsers;
+    } catch (err) {
+        console.error('Erro ao buscar dashboard:', err);
+    }
 }
 
-// ===== Simulação de permissões do usuário =====
-const user = { role: 'admin' }; // Pode ser 'admin', 'mod', 'user'
-
-function checkPermissions() {
-  // Exemplo: esconder Propagandas para não-admins
-  if(user.role !== 'admin') {
-    document.getElementById('nav-ads').style.display = 'none';
-    document.getElementById('section-ads').style.display = 'none';
-  }
+async function fetchPosts() {
+    try {
+        const res = await fetch('/api/posts');
+        const posts = await res.json();
+        const tbody = document.querySelector('#posts-table tbody');
+        tbody.innerHTML = '';
+        posts.forEach(post => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${post.id}</td>
+                <td>${post.title}</td>
+                <td>${post.author}</td>
+                <td>
+                    <button onclick="editPost(${post.id})">Editar</button>
+                    <button onclick="deletePost(${post.id})">Excluir</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error('Erro ao buscar posts:', err);
+    }
 }
 
-checkPermissions();
-
-// ===== Carregar dados do dashboard =====
-async function loadDashboard() {
-  try {
-    // Simulação de fetch de dados (substitua pelas suas APIs reais)
-    const postsRes = { count: 128 };
-    const usersRes = { count: 45 };
-    const adsRes = { count: 12 };
-    const visitsRes = { data: { count: 10234 } };
-
-    document.getElementById("stat-posts").textContent = postsRes.count || 0;
-    document.getElementById("stat-users").textContent = usersRes.count || 0;
-    document.getElementById("stat-ads").textContent = adsRes.count || 0;
-    document.getElementById("stat-visits").textContent = visitsRes.data?.count?.toLocaleString("pt-BR") || 0;
-  } catch(err) {
-    console.error("Erro ao carregar dashboard:", err);
-  }
+async function fetchUsers() {
+    try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        const tbody = document.querySelector('#users-table tbody');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button onclick="editUser(${user.id})">Editar</button>
+                    <button onclick="deleteUser(${user.id})">Excluir</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error('Erro ao buscar usuários:', err);
+    }
 }
 
-// Carregar dashboard ao abrir
-loadDashboard();
+// Funções de ação (exemplo)
+function editPost(id) {
+    alert('Editar post ' + id);
+}
+
+function deletePost(id) {
+    if(confirm('Deseja realmente excluir este post?')) {
+        fetch(`/api/posts/${id}`, { method: 'DELETE' })
+            .then(() => fetchPosts());
+    }
+}
+
+function editUser(id) {
+    alert('Editar usuário ' + id);
+}
+
+function deleteUser(id) {
+    if(confirm('Deseja realmente excluir este usuário?')) {
+        fetch(`/api/users/${id}`, { method: 'DELETE' })
+            .then(() => fetchUsers());
+    }
+}
+
+// Inicialização
+fetchDashboard();
+fetchPosts();
+fetchUsers();
