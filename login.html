@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Defesa Civil Cidade Ocidental</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <img src="/images/logo2.png" alt="Logo Defesa Civil" class="login-logo">
+                    <h1>Área Restrita</h1>
+                    <p>Acesse o painel administrativo</p>
+                </div>
+                <div id="error-message" class="error-message" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8V12M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span id="error-text"></span>
+                </div>
+                <form class="login-form" id="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuário</label>
+                        <input type="text" id="username" name="username" required placeholder="Digite seu usuário" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" required placeholder="Digite sua senha" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-submit" id="submit-btn">
+                        <span id="btn-text">Entrar</span>
+                        <svg id="btn-loading" style="display: none;" viewBox="0 0 24 24" fill="none" width="20" height="20" class="spin">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32"/>
+                        </svg>
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <a href="index.html">← Voltar ao site</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        // Master credentials
+        const MASTER_USERNAME = "maxgtp";
+        const MASTER_PASSWORD = "max290513";
+
+        document.getElementById("login-form").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
+            const errorText = document.getElementById("error-text");
+            const submitBtn = document.getElementById("submit-btn");
+            const btnText = document.getElementById("btn-text");
+            const btnLoading = document.getElementById("btn-loading");
+            
+            // Hide previous error
+            errorMessage.style.display = "none";
+            
+            // Validate inputs
+            if (!username || !password) {
+                errorText.textContent = "Por favor, preencha todos os campos.";
+                errorMessage.style.display = "flex";
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.style.display = "none";
+            btnLoading.style.display = "block";
+            
+            // Simulate network delay for security
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Check credentials
+            if (username === MASTER_USERNAME && password === MASTER_PASSWORD) {
+                // Store auth state
+                sessionStorage.setItem("isAuthenticated", "true");
+                sessionStorage.setItem("authTime", Date.now().toString());
+                
+                // Redirect to admin panel
+                window.location.href = "admin.html";
+            } else {
+                // Show error
+                errorText.textContent = "Usuário ou senha incorretos.";
+                errorMessage.style.display = "flex";
+                
+                // Reset button
+                submitBtn.disabled = false;
+                btnText.style.display = "block";
+                btnLoading.style.display = "none";
+                
+                // Clear password field
+                document.getElementById("password").value = "";
+                document.getElementById("password").focus();
+            }
+        });
+
+        // Check if already authenticated
+        document.addEventListener("DOMContentLoaded", function() {
+            const isAuth = sessionStorage.getItem("isAuthenticated");
+            const authTime = parseInt(sessionStorage.getItem("authTime") || "0");
+            const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
+            
+            if (isAuth === "true" && (Date.now() - authTime) < SESSION_DURATION) {
+                window.location.href = "admin.html";
+            }
+        });
+    </script>
+</body>
+</html>

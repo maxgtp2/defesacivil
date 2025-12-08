@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defesa Civil - Cidade Ocidental GO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Emergency Bar -->
+    <div class="emergency-bar">
+        <div class="container emergency-content">
+            <div class="emergency-pulse"></div>
+            <span class="emergency-text">
+                <strong>EMERGÊNCIA 24H:</strong> Ligue <strong id="emergency-phone">199</strong>
+            </span>
+            <a href="tel:199" class="emergency-call-btn">
+                <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                    <path d="M22 16.92V19.92C22 20.48 21.56 20.93 21 20.97C20.62 21 20.27 21.02 19.93 21.02C10.97 21.02 3.68 14.82 2.21 6.56C2.07 5.71 2 4.85 2 3.97C2.04 3.41 2.49 2.97 3.05 2.97H6.05C6.52 2.97 6.93 3.31 7.01 3.77C7.14 4.64 7.38 5.48 7.72 6.26C7.89 6.65 7.81 7.1 7.5 7.41L5.79 9.12C7.27 12.07 9.9 14.7 12.85 16.18L14.56 14.47C14.87 14.16 15.32 14.08 15.71 14.25C16.49 14.59 17.33 14.83 18.2 14.96C18.66 15.04 19 15.45 19 15.92V16.92H22Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                Ligar Agora
+            </a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="main-header">
+        <nav class="navbar">
+            <div class="container navbar-content">
+                <a href="#inicio" class="logo">
+                    <img src="/images/logo2.png" alt="Logo Defesa Civil" class="logo-image">
+                </a>
+                <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#inicio" class="active">Início</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#noticias">Notícias</a></li>
+                    <li><a href="#alertas">Alertas</a></li>
+                    <li><a href="#transparencia">Transparência</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="login.html" class="nav-btn-login">Área Restrita</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar Ads -->
+    <aside class="sidebar-ads left" id="sidebar-ads-left"></aside>
+    <aside class="sidebar-ads right" id="sidebar-ads-right"></aside>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-pattern"></div>
+        </div>
+        <div class="container hero-wrapper">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Atendimento 24 horas
+                </div>
+                <h1 class="hero-title">
+                    Proteção e <span class="text-gradient">Segurança</span><br>
+                    para Nossa Cidade
+                </h1>
+                <p class="hero-description">
+                    A Defesa Civil de Cidade Ocidental trabalha incansavelmente para prevenir, 
+                    preparar e responder a situações de emergência, protegendo vidas e patrimônios.
+                </p>
+                <div class="hero-buttons">
+                    <a href="tel:199" class="btn btn-primary btn-glow">
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                            <path d="M22 16.92V19.92C22 20.48 21.56 20.93 21 20.97C20.62 21 20.27 21.02 19.93 21.02C10.97 21.02 3.68 14.82 2.21 6.56C2.07 5.71 2 4.85 2 3.97C2.04 3.41 2.49 2.97 3.05 2.97H6.05C6.52 2.97 6.93 3.31 7.01 3.77C7.14 4.64 7.38 5.48 7.72 6.26C7.89 6.65 7.81 7.1 7.5 7.41L5.79 9.12C7.27 12.07 9.9 14.7 12.85 16.18L14.56 14.47C14.87 14.16 15.32 14.08 15.71 14.25C16.49 14.59 17.33 14.83 18.2 14.96C18.66 15.04 19 15.45 19 15.92V16.92H22Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Ligar Agora (199)
+                    </a>
+                    <a href="#servicos" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Ver Serviços
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="hero-card-content">
+                        <span class="hero-card-number" id="visit-count">0</span>
+                        <span class="hero-card-label">Visitas ao Site</span>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="hero-card-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+                            <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="hero-card-content">
+                        <span class="hero-card-number">+500</span>
+                        <span class="hero-card-label">Atendimentos/Ano</span>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="hero-card-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="hero-card-content">
+                        <span class="hero-card-number">24h</span>
+                        <span class="hero-card-label">Monitoramento</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <a href="#servicos" class="scroll-indicator">
+                <span>Rolar para baixo</span>
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                    <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Quick Services Section -->
+    <section class="services-section" id="servicos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Acesso Rápido
+                </span>
+                <h2 class="section-title">Serviços ao Cidadão</h2>
+                <p class="section-description">Acesse rapidamente os principais serviços da Prefeitura de Cidade Ocidental</p>
+            </div>
+            <div class="services-grid" id="quick-links-container">
+                <!-- Links carregados dinamicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section" id="noticias">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                        <path d="M19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4H15L21 10V18C21 19.1046 20.1046 20 19 20Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M17 20V13H7V20" stroke="currentColor" stroke-width="2"/>
+                        <path d="M7 10H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Últimas Notícias
+                </span>
+                <h2 class="section-title">Acompanhe a Defesa Civil</h2>
+                <p class="section-description">Fique por dentro das últimas atualizações e ações da Defesa Civil</p>
+            </div>
+            
+            <div class="news-carousel">
+                <div class="news-carousel-track" id="news-carousel-track">
+                    <!-- Posts carregados dinamicamente -->
+                </div>
+            </div>
+
+            <div class="carousel-nav">
+                <button class="carousel-btn prev" onclick="prevSlide()" id="carousel-prev">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="carousel-dots" id="carousel-dots"></div>
+                <button class="carousel-btn next" onclick="nextSlide()" id="carousel-next">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="news-cta">
+                <a href="https://www.instagram.com/defesacivil_co/" target="_blank" class="btn btn-instagram">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
+                    </svg>
+                    Siga-nos no Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ads Between Section -->
+    <div class="between-ads" id="between-posts-ads"></div>
+
+    <!-- Alerts Section -->
+    <section class="alerts-section" id="alertas">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-badge light">
+                    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18C1.64 18.3 1.52 18.63 1.47 18.98C1.42 19.33 1.45 19.69 1.56 20.02C1.67 20.36 1.85 20.67 2.1 20.92C2.34 21.17 2.64 21.36 2.98 21.47H21.02C21.36 21.36 21.66 21.17 21.9 20.92C22.15 20.67 22.33 20.36 22.44 20.02C22.55 19.69 22.58 19.33 22.53 18.98C22.48 18.63 22.36 18.3 22.18 18L13.71 3.86C13.53 3.56 13.28 3.31 12.99 3.13C12.69 2.95 12.36 2.85 12.02 2.85C11.68 2.85 11.35 2.95 11.05 3.13C10.76 3.31 10.51 3.56 10.33 3.86H10.29Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 9V13M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Alertas e Avisos
+                </span>
+                <h2 class="section-title light">Mantenha-se Informado</h2>
+                <p class="section-description light">Informações importantes para sua segurança</p>
+            </div>
+            <div class="alerts-grid">
+                <div class="alert-card warning">
+                    <div class="alert-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 9V13M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10.29 3.86L1.82 18C1.64 18.3 1.52 18.63 1.47 18.98C1.42 19.33 1.45 19.69 1.56 20.02C1.67 20.36 1.85 20.67 2.1 20.92C2.34 21.17 2.64 21.36 2.98 21.47H21.02C21.36 21.36 21.66 21.17 21.9 20.92C22.15 20.67 22.33 20.36 22.44 20.02C22.55 19.69 22.58 19.33 22.53 18.98C22.48 18.63 22.36 18.3 22.18 18L13.71 3.86C13.53 3.56 13.28 3.31 12.99 3.13C12.69 2.95 12.36 2.85 12.02 2.85C11.68 2.85 11.35 2.95 11.05 3.13C10.76 3.31 10.51 3.56 10.33 3.86H10.29Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Período Chuvoso</h3>
+                        <p>Redobrar atenção em áreas de risco. Evite transitar em locais alagados e fique atento aos alertas.</p>
+                    </div>
+                </div>
+                <div class="alert-card info">
+                    <div class="alert-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Canais de Atendimento</h3>
+                        <p>Emergência: 199. Atendimento administrativo: (61) 3625-0000. Estamos sempre prontos para ajudar.</p>
+                    </div>
+                </div>
+                <div class="alert-card success">
+                    <div class="alert-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M22 11.08V12C21.99 17.52 17.52 21.99 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C13.07 2 14.12 2.17 15.13 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Prevenção Ativa</h3>
+                        <p>Monitoramento constante das condições meteorológicas e áreas de risco da cidade.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transparency Section -->
+    <section class="transparency-section" id="transparencia">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                        <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Transparência
+                </span>
+                <h2 class="section-title">Portal da Transparência</h2>
+                <p class="section-description">Acesse informações públicas e documentos oficiais</p>
+            </div>
+            <div class="transparency-grid">
+                <a href="http://acessoainformacao.cidadeocidental.go.gov.br/informacao/licitacoes" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M14 2H6C5.47 2 4.96 2.21 4.59 2.59C4.21 2.96 4 3.47 4 4V20C4 20.53 4.21 21.04 4.59 21.41C4.96 21.79 5.47 22 6 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V8L14 2Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Licitações</span>
+                </a>
+                <a href="http://acessoainformacao.cidadeocidental.go.gov.br/informacao/contratos" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M16 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V8L16 3Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 3V8H21" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 13H16M8 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Contratos</span>
+                </a>
+                <a href="http://acessoainformacao.cidadeocidental.go.gov.br/informacao/despesas" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 1V23M17 5H9.5C8.57 5 7.68 5.37 7.03 6.03C6.37 6.68 6 7.57 6 8.5C6 9.43 6.37 10.32 7.03 10.97C7.68 11.63 8.57 12 9.5 12H14.5C15.43 12 16.32 12.37 16.97 13.03C17.63 13.68 18 14.57 18 15.5C18 16.43 17.63 17.32 16.97 17.97C16.32 18.63 15.43 19 14.5 19H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Despesas</span>
+                </a>
+                <a href="http://acessoainformacao.cidadeocidental.go.gov.br/informacao/receitas" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M23 6L13.5 15.5L8.5 10.5L1 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 6H23V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span>Receitas</span>
+                </a>
+                <a href="http://acessoainformacao.cidadeocidental.go.gov.br/informacao/servidores" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M17 21V19C17 17.94 16.58 16.92 15.83 16.17C15.08 15.42 14.06 15 13 15H5C3.94 15 2.92 15.42 2.17 16.17C1.42 16.92 1 17.94 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M23 21V19C23 18.11 22.7 17.25 22.16 16.55C21.62 15.85 20.86 15.35 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 3.13C16.86 3.35 17.62 3.85 18.17 4.55C18.71 5.25 19 6.12 19 7C19 7.88 18.71 8.75 18.17 9.45C17.62 10.15 16.86 10.65 16 10.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Servidores</span>
+                </a>
+                <a href="https://dom.cidadeocidental.go.gov.br/" target="_blank" class="transparency-card">
+                    <div class="transparency-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 19.5C4 18.84 4.26 18.2 4.73 17.73C5.2 17.26 5.84 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M6.5 2H20V22H6.5C5.84 22 5.2 21.74 4.73 21.27C4.26 20.8 4 20.16 4 19.5V4.5C4 3.84 4.26 3.2 4.73 2.73C5.2 2.26 5.84 2 6.5 2Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span>Diário Oficial</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contato">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="section-header light left">
+                        <span class="section-badge light">
+                            <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                                <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M22 22L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M22 8.5C22 10.99 19.99 13 17.5 13C15.01 13 13 10.99 13 8.5C13 6.01 15.01 4 17.5 4C19.99 4 22 6.01 22 8.5Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Contato
+                        </span>
+                        <h2 class="section-title light">Fale Conosco</h2>
+                    </div>
+                    <p class="contact-description">
+                        Entre em contato com a Defesa Civil de Cidade Ocidental. 
+                        Estamos à disposição para atender a população 24 horas.
+                    </p>
+                    <div class="contact-cards">
+                        <div class="contact-card">
+                            <div class="contact-card-icon emergency">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M22 16.92V19.92C22 20.48 21.56 20.93 21 20.97C20.62 21 20.27 21.02 19.93 21.02C10.97 21.02 3.68 14.82 2.21 6.56C2.07 5.71 2 4.85 2 3.97C2.04 3.41 2.49 2.97 3.05 2.97H6.05C6.52 2.97 6.93 3.31 7.01 3.77C7.14 4.64 7.38 5.48 7.72 6.26C7.89 6.65 7.81 7.1 7.5 7.41L5.79 9.12C7.27 12.07 9.9 14.7 12.85 16.18L14.56 14.47C14.87 14.16 15.32 14.08 15.71 14.25C16.49 14.59 17.33 14.83 18.2 14.96C18.66 15.04 19 15.45 19 15.92V16.92H22Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h4>Emergência 24h</h4>
+                                <p id="contact-emergency">199</p>
+                            </div>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h4>E-mail</h4>
+                                <p id="contact-email">defesacivil@cidadeocidental.go.gov.br</p>
+                            </div>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61 3.95 5.32 5.64 3.64C7.32 1.95 9.61 1 12 1C14.39 1 16.68 1.95 18.36 3.64C20.05 5.32 21 7.61 21 10Z" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h4>Endereço</h4>
+                                <p id="contact-address">Cidade Ocidental - GO</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/defesacivil_co/" target="_blank" class="social-link" title="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/prefeituraco" target="_blank" class="social-link" title="Facebook">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M18 2H15C13.67 2 12.4 2.53 11.46 3.46C10.53 4.4 10 5.67 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73 14.11 6.48 14.29 6.29C14.48 6.11 14.73 6 15 6H18V2Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contact-form">
+                        <h3>Envie sua mensagem</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Nome completo</label>
+                                <input type="text" id="name" name="name" required placeholder="Seu nome">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Assunto</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Assunto da mensagem">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensagem</label>
+                            <textarea id="message" name="message" required placeholder="Digite sua mensagem..." rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-submit">
+                            <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Enviar mensagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#inicio" class="footer-logo">
+                        <img src="/images/logo2.png" alt="Logo Defesa Civil">
+                    </a>
+                    <p class="footer-description">
+                        Defesa Civil de Cidade Ocidental - GO.<br>
+                        Trabalhando pela proteção e segurança da nossa comunidade.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navegação</h4>
+                        <ul>
+                            <li><a href="#inicio">Início</a></li>
+                            <li><a href="#servicos">Serviços</a></li>
+                            <li><a href="#noticias">Notícias</a></li>
+                            <li><a href="#contato">Contato</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Serviços</h4>
+                        <ul>
+                            <li><a href="http://acessoainformacao.cidadeocidental.go.gov.br/cidadao/ouvidoria/inicio" target="_blank">Ouvidoria</a></li>
+                            <li><a href="https://dom.cidadeocidental.go.gov.br/" target="_blank">Diário Oficial</a></li>
+                            <li><a href="http://acessoainformacao.cidadeocidental.go.gov.br/" target="_blank">Transparência</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Emergências</h4>
+                        <ul>
+                            <li><span class="emergency-number">Defesa Civil: 199</span></li>
+                            <li><span class="emergency-number">Bombeiros: 193</span></li>
+                            <li><span class="emergency-number">SAMU: 192</span></li>
+                            <li><span class="emergency-number">Polícia: 190</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Defesa Civil - Cidade Ocidental. Todos os direitos reservados.</p>
+                <p>Prefeitura Municipal de Cidade Ocidental - GO</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Defesa Civil</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-page">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="/images/logo2.png" alt="Logo" class="sidebar-logo">
+                <div>
+                    <h2>Admin</h2>
+                    <span style="font-size: 12px; color: rgba(255,255,255,0.6);">Painel de Controle</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" data-section="dashboard" onclick="showSection('dashboard')">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M3 9L12 2L21 9V20C21 20.53 20.79 21.04 20.41 21.41C20.04 21.79 19.53 22 19 22H5C4.47 22 3.96 21.79 3.59 21.41C3.21 21.04 3 20.53 3 20V9Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="nav-item" data-section="posts" onclick="showSection('posts')">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M14 2H6C5.47 2 4.96 2.21 4.59 2.59C4.21 2.96 4 3.47 4 4V20C4 20.53 4.21 21.04 4.59 21.41C4.96 21.79 5.47 22 6 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V8L14 2Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M14 2V8H20M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Notícias
+                </a>
+                <a class="nav-item" data-section="links" onclick="showSection('links')">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M10 13C10.43 13.57 10.98 14.05 11.61 14.39C12.24 14.74 12.93 14.94 13.65 14.99C14.36 15.04 15.08 14.94 15.75 14.69C16.42 14.44 17.03 14.05 17.54 13.54L20.54 10.54C21.45 9.6 21.95 8.33 21.94 7.02C21.93 5.71 21.41 4.46 20.48 3.53C19.55 2.6 18.3 2.08 16.99 2.07C15.68 2.06 14.41 2.56 13.47 3.47L11.75 5.18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M14 11C13.57 10.43 13.02 9.95 12.39 9.61C11.76 9.26 11.07 9.06 10.35 9.01C9.64 8.96 8.92 9.06 8.25 9.31C7.58 9.56 6.97 9.95 6.46 10.46L3.46 13.46C2.55 14.4 2.05 15.67 2.06 16.98C2.07 18.29 2.59 19.54 3.52 20.47C4.45 21.4 5.7 21.92 7.01 21.93C8.32 21.94 9.59 21.44 10.53 20.53L12.24 18.82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Links Rápidos
+                </a>
+                <a class="nav-item" data-section="settings" onclick="showSection('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19.4 15C19.2 15.3 19.1 15.7 19.2 16L19.8 18.3C19.9 18.6 19.8 18.9 19.6 19.1L18.1 20.6C17.9 20.8 17.6 20.9 17.3 20.8L15 20.2C14.7 20.1 14.3 20.2 14 20.4L13.5 20.7C13.2 20.9 13 21.2 12.9 21.5L12.4 23.8C12.3 24.1 12 24.3 11.7 24.3H9.3C9 24.3 8.7 24.1 8.6 23.8L8.1 21.5C8 21.2 7.8 20.9 7.5 20.7L7 20.4C6.7 20.2 6.3 20.1 6 20.2L3.7 20.8C3.4 20.9 3.1 20.8 2.9 20.6L1.4 19.1C1.2 18.9 1.1 18.6 1.2 18.3L1.8 16C1.9 15.7 1.8 15.3 1.6 15L1.3 14.5C1.1 14.2 0.8 14 0.5 13.9L-1.8 13.4C-2.1 13.3 -2.3 13 -2.3 12.7V10.3C-2.3 10 -2.1 9.7 -1.8 9.6L0.5 9.1C0.8 9 1.1 8.8 1.3 8.5L1.6 8C1.8 7.7 1.9 7.3 1.8 7L1.2 4.7C1.1 4.4 1.2 4.1 1.4 3.9L2.9 2.4C3.1 2.2 3.4 2.1 3.7 2.2L6 2.8C6.3 2.9 6.7 2.8 7 2.6L7.5 2.3C7.8 2.1 8 1.8 8.1 1.5L8.6 -0.8C8.7 -1.1 9 -1.3 9.3 -1.3H11.7C12 -1.3 12.3 -1.1 12.4 -0.8L12.9 1.5C13 1.8 13.2 2.1 13.5 2.3L14 2.6C14.3 2.8 14.7 2.9 15 2.8L17.3 2.2C17.6 2.1 17.9 2.2 18.1 2.4L19.6 3.9C19.8 4.1 19.9 4.4 19.8 4.7L19.2 7C19.1 7.3 19.2 7.7 19.4 8L19.7 8.5C19.9 8.8 20.2 9 20.5 9.1L22.8 9.6C23.1 9.7 23.3 10 23.3 10.3V12.7C23.3 13 23.1 13.3 22.8 13.4L20.5 13.9C20.2 14 19.9 14.2 19.7 14.5L19.4 15Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Configurações
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a class="nav-item" onclick="logout()">
+                    <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M9 21H5C4.47 21 3.96 20.79 3.59 20.41C3.21 20.04 3 19.53 3 19V5C3 4.47 3.21 3.96 3.59 3.59C3.96 3.21 4.47 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <button class="mobile-menu-toggle" onclick="toggleAdminSidebar()">
+                    <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="admin-header-info">
+                    <span>Bem-vindo ao painel administrativo</span>
+                </div>
+                <a href="index.html" class="btn btn-sm btn-outline" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                        <path d="M18 13V19C18 19.53 17.79 20.04 17.41 20.41C17.04 20.79 16.53 21 16 21H5C4.47 21 3.96 20.79 3.59 20.41C3.21 20.04 3 19.53 3 19V8C3 7.47 3.21 6.96 3.59 6.59C3.96 6.21 4.47 6 5 6H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 3H21V9M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Ver Site
+                </a>
+            </header>
+
+            <div class="admin-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="admin-section active">
+                    <div class="section-header-admin">
+                        <h1>Dashboard</h1>
+                    </div>
+                    <p class="section-description-admin">Visão geral do sistema</p>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-card-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                                    <path d="M17 21V19C17 17.94 16.58 16.92 15.83 16.17C15.08 15.42 14.06 15 13 15H5C3.94 15 2.92 15.42 2.17 16.17C1.42 16.92 1 17.94 1 19V21" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="stat-card-value" id="stat-visits">0</span>
+                                <span class="stat-card-label">Visitas</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                                    <path d="M14 2H6C5.47 2 4.96 2.21 4.59 2.59C4.21 2.96 4 3.47 4 4V20C4 20.53 4.21 21.04 4.59 21.41C4.96 21.79 5.47 22 6 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V8L14 2Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="stat-card-value" id="stat-posts">0</span>
+                                <span class="stat-card-label">Notícias</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-icon orange">
+                                <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                                    <path d="M10 13C10.43 13.57 10.98 14.05 11.61 14.39C12.24 14.74 12.93 14.94 13.65 14.99C14.36 15.04 15.08 14.94 15.75 14.69C16.42 14.44 17.03 14.05 17.54 13.54L20.54 10.54C21.45 9.6 21.95 8.33 21.94 7.02C21.93 5.71 21.41 4.46 20.48 3.53C19.55 2.6 18.3 2.08 16.99 2.07C15.68 2.06 14.41 2.56 13.47 3.47L11.75 5.18" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M14 11C13.57 10.43 13.02 9.95 12.39 9.61C11.76 9.26 11.07 9.06 10.35 9.01C9.64 8.96 8.92 9.06 8.25 9.31C7.58 9.56 6.97 9.95 6.46 10.46L3.46 13.46C2.55 14.4 2.05 15.67 2.06 16.98C2.07 18.29 2.59 19.54 3.52 20.47C4.45 21.4 5.7 21.92 7.01 21.93C8.32 21.94 9.59 21.44 10.53 20.53L12.24 18.82" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="stat-card-value" id="stat-links">0</span>
+                                <span class="stat-card-label">Links</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 32px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;">
+                        <h3 style="margin-bottom: 16px; font-size: 18px;">Acesso Rápido</h3>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button class="btn btn-primary btn-sm" onclick="showSection('posts')">
+                                <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Nova Notícia
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="showSection('links')">
+                                <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Novo Link
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="showSection('settings')">
+                                <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Configurações
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Posts Section -->
+                <section id="posts" class="admin-section">
+                    <div class="section-header-admin">
+                        <h1>Notícias</h1>
+                        <button class="btn btn-primary" onclick="openModal('post-modal')">
+                            <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Nova Notícia
+                        </button>
+                    </div>
+                    <p class="section-description-admin">Gerencie as notícias do site</p>
+                    
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Imagem</th>
+                                    <th>Título</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="posts-table">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 48px;">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Links Section -->
+                <section id="links" class="admin-section">
+                    <div class="section-header-admin">
+                        <h1>Links Rápidos</h1>
+                        <button class="btn btn-primary" onclick="openModal('link-modal')">
+                            <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Novo Link
+                        </button>
+                    </div>
+                    <p class="section-description-admin">Gerencie os links rápidos do site</p>
+                    
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>URL</th>
+                                    <th>Status</th>
+                                    <th>Ordem</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="links-table">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 48px;">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="admin-section">
+                    <div class="section-header-admin">
+                        <h1>Configurações</h1>
+                    </div>
+                    <p class="section-description-admin">Configure as opções do site</p>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>Informações de Contato</h3>
+                            <form id="settings-form">
+                                <div class="form-group">
+                                    <label for="emergency_phone">Telefone de Emergência</label>
+                                    <input type="text" id="emergency_phone" placeholder="199">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact_email">E-mail de Contato</label>
+                                    <input type="email" id="contact_email" placeholder="email@exemplo.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Endereço</label>
+                                    <input type="text" id="address" placeholder="Cidade Ocidental - GO">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            </form>
+                        </div>
+                        <div class="settings-card">
+                            <h3>Cores do Site</h3>
+                            <form id="colors-form">
+                                <div class="form-group">
+                                    <label for="primary_color">Cor Primária</label>
+                                    <input type="color" id="primary_color" value="#ea580c">
+                                </div>
+                                <div class="form-group">
+                                    <label for="secondary_color">Cor Secundária</label>
+                                    <input type="color" id="secondary_color" value="#1e3a5f">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Cores</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Post Modal -->
+    <div class="modal" id="post-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Notícia</h2>
+                <button class="modal-close" onclick="closeModal('post-modal')">&times;</button>
+            </div>
+            <form id="post-form">
+                <input type="hidden" id="post-id">
+                <div class="form-group">
+                    <label for="post-title">Título</label>
+                    <input type="text" id="post-title" required placeholder="Título da notícia">
+                </div>
+                <div class="form-group">
+                    <label for="post-content">Conteúdo</label>
+                    <textarea id="post-content" rows="4" placeholder="Conteúdo da notícia"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="post-image">URL da Imagem</label>
+                    <input type="url" id="post-image" placeholder="https://exemplo.com/imagem.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="post-link">Link Externo</label>
+                    <input type="url" id="post-link" placeholder="https://instagram.com/...">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="post-visible" checked>
+                        Visível no site
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('post-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link Modal -->
+    <div class="modal" id="link-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Link</h2>
+                <button class="modal-close" onclick="closeModal('link-modal')">&times;</button>
+            </div>
+            <form id="link-form">
+                <input type="hidden" id="link-id">
+                <div class="form-group">
+                    <label for="link-title">Título</label>
+                    <input type="text" id="link-title" required placeholder="Título do link">
+                </div>
+                <div class="form-group">
+                    <label for="link-url">URL</label>
+                    <input type="url" id="link-url" required placeholder="https://exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="link-description">Descrição</label>
+                    <input type="text" id="link-description" placeholder="Descrição do serviço">
+                </div>
+                <div class="form-group">
+                    <label for="link-order">Ordem de Exibição</label>
+                    <input type="number" id="link-order" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="link-visible" checked>
+                        Visível no site
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('link-modal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
