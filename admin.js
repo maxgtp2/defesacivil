@@ -333,29 +333,47 @@ async function handlePostSubmit(e) {
 // Handle Link Submit
 async function handleLinkSubmit(e) {
   e.preventDefault()
-  if (!supabaseClient) return
+  if (!supabaseClient) {
+    showToast("Erro de conexão com o banco de dados.", "error")
+    return
+  }
 
   const id = document.getElementById("link-id").value
+  const title = document.getElementById("link-title").value?.trim()
+  const url = document.getElementById("link-url").value?.trim()
+  const description = document.getElementById("link-description").value?.trim() || ""
+  const displayOrder = Number.parseInt(document.getElementById("link-order").value) || 0
+  const isVisible = document.getElementById("link-visible").checked
+
+  // Validate required fields
+  if (!title || !url) {
+    showToast("Preencha o título e a URL.", "error")
+    return
+  }
+
   const linkData = {
-    title: document.getElementById("link-title").value,
-    url: document.getElementById("link-url").value,
-    description: document.getElementById("link-description").value || null,
-    display_order: Number.parseInt(document.getElementById("link-order").value) || 0,
-    is_visible: document.getElementById("link-visible").checked,
+    title: title,
+    url: url,
+    description: description,
+    display_order: displayOrder,
+    is_visible: isVisible,
   }
 
   try {
-    let error
+    let result
 
     if (id) {
-      const result = await supabaseClient.from("quick_links").update(linkData).eq("id", id)
-      error = result.error
+      // Update existing link
+      result = await supabaseClient.from("quick_links").update(linkData).eq("id", id).select()
     } else {
-      const result = await supabaseClient.from("quick_links").insert([linkData])
-      error = result.error
+      // Insert new link
+      result = await supabaseClient.from("quick_links").insert([linkData]).select()
     }
 
-    if (error) throw error
+    if (result.error) {
+      console.error("Supabase error:", result.error)
+      throw result.error
+    }
 
     showToast("Link salvo com sucesso!", "success")
     closeModal("link-modal")
@@ -363,7 +381,7 @@ async function handleLinkSubmit(e) {
     loadDashboardData()
   } catch (error) {
     console.error("Error saving link:", error)
-    showToast("Erro ao salvar link.", "error")
+    showToast("Erro ao salvar link: " + (error.message || "Verifique as permissões do banco de dados."), "error")
   }
 }
 
